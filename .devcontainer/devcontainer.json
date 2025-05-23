@@ -1,0 +1,22 @@
+{
+  "name": "ros2-franka-dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "runArgs": [
+    "--privileged",
+    "--network=host",
+    "--env", "DISPLAY=${env:DISPLAY}",
+    "--volume", "/tmp/.X11-unix:/tmp/.X11-unix",
+    "--volume", "${localWorkspaceFolder}/src:/ws/src"
+  ],
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  },
+  "extensions": [
+    "ms-iot.vscode-ros",
+    "ms-vscode.cpptools"
+  ],
+  "postCreateCommand": "source /opt/ros/humble/setup.bash && colcon build --symlink-install",
+  "remoteUser": "root"
+}
