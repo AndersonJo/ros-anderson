@@ -1,0 +1,244 @@
+# ==============================================================================
+# ROS2 & Colcon Build Files
+# ==============================================================================
+# Build artifacts - 빌드할 때마다 새로 생성되는 파일들
+build/
+install/
+log/
+
+# Colcon-specific
+.colcon_install_layout
+.colcon_test_result_summary
+
+# ==============================================================================
+# Source Code - 외부에서 자동으로 다운로드되는 패키지들
+# ==============================================================================
+# 전체 src/ 디렉토리 제외 - vcs import로 자동 설치되는 패키지들
+src/
+
+# tutorial.repos로 자동 설치되는 패키지들 (명시적 표시):
+# src/moveit2/
+# src/moveit_msgs/
+# src/moveit_resources/
+# src/moveit_task_constructor/
+# src/moveit2_tutorials/
+# src/srdfdom/
+# src/control_msgs/
+# src/ros2_control/
+# src/ros2_controllers/
+# src/franka_ros2/
+# src/franka_description/
+# src/ros_gz/
+# src/geometric_shapes/
+# src/warehouse_ros/
+# src/gazebo_ros2_control/
+
+# franka.repos로 자동 설치되는 패키지들:
+# src/franka_ros2/ (중복)
+# src/franka_description/ (중복)
+# src/panda_moveit_config/
+# src/franka_example_controllers/
+
+# 🔧 직접 개발한 패키지를 Git에 포함하려면 아래처럼 추가:
+# !src/my_custom_package/
+# !src/my_robot_controller/
+# !src/my_application/
+
+# ==============================================================================
+# DevContainer 설정 - 팀원들과 공유되어야 함
+# ==============================================================================
+# DevContainer 설정은 포함 (주석 처리됨)
+# .devcontainer/
+
+# 하지만 개인 환경 설정은 제외
+.devcontainer/.env
+.devcontainer/docker-compose.override.yml
+.devcontainer/*.local.*
+
+# ==============================================================================
+# VS Code / Cursor 설정
+# ==============================================================================
+# IDE 개인 설정 제외
+.vscode/
+.cursor/
+
+# 프로젝트 공통 설정을 포함하고 싶다면 주석 해제:
+# !.vscode/settings.json
+# !.vscode/launch.json
+# !.vscode/tasks.json
+# !.vscode/c_cpp_properties.json
+
+# ==============================================================================
+# Python
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# PyCharm
+.idea/
+
+# ==============================================================================
+# C++
+# ==============================================================================
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+# ==============================================================================
+# ROS2 Runtime Files
+# ==============================================================================
+# Gazebo logs and cache
+.gazebo/
+gzserver-*
+gzclient-*
+.gz/
+
+# RViz config files (개인 설정)
+*.rviz
+
+# ROS2 bag files (대용량 데이터)
+*.bag
+*.bag2
+*.db3
+*.mcap
+
+# ROS2 parameter files (일시적)
+*.yaml.backup
+*.yaml.orig
+
+# ==============================================================================
+# Workspace-specific files
+# ==============================================================================
+# 개발 중 생성되는 임시 파일들
+results/
+data/
+experiments/
+recordings/
+logs/
+
+# 개인 메모나 TODO
+TODO.md
+NOTES.md
+*.notes
+.notes/
+
+# 테스트 결과
+test_results/
+coverage/
+*.coverage
+
+# ==============================================================================
+# System and backup files
+# ==============================================================================
+# Linux
+*~
+.directory
+.nfs*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Generic backup files
+*.bak
+*.backup
+*.swp
+*.swo
+*.tmp
+
+# ==============================================================================
+# Docker and container files
+# ==============================================================================
+# Docker 관련 개인 설정
+.dockerignore.bak
+docker-compose.override.yml
+.docker/
+
+# Container volume mounts (일시적)
+.volumes/ 

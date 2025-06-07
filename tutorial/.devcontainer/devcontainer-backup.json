@@ -1,0 +1,20 @@
+{
+  "name": "Simple ROS2 Environment",
+  "image": "osrf/ros:humble-desktop-full",
+  "workspaceFolder": "/workspace",
+  "runArgs": [
+    "--dns=8.8.8.8",
+    "--dns=8.8.4.4"
+  ],
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+  ],
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  },
+  "extensions": [
+    "ms-iot.vscode-ros",
+    "ms-python.python"
+  ],
+  "postCreateCommand": "apt-get update && apt-get install -y git python3-pip curl wget && echo 'source /opt/ros/humble/setup.bash' >> ~/.bashrc"
+} 
