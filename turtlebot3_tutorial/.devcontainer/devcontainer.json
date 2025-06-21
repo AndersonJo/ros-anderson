@@ -20,6 +20,7 @@
     "--volume=${env:HOME}/.Xauthority:/home/user/.Xauthority:rw",
     "--env=DISPLAY=${env:DISPLAY}",
     "--env=QT_X11_NO_MITSHM=1",
+    "--env=XDG_RUNTIME_DIR=/tmp/runtime-user",
     "--env=LIBGL_ALWAYS_INDIRECT=1",
     "--env=XAUTHORITY=/home/user/.Xauthority",
     "--env=NVIDIA_VISIBLE_DEVICES=all",
