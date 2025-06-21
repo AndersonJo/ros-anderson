@@ -1,0 +1,109 @@
+{
+  "name": "ROS2 TurtleBot3 + RL Development Environment",
+  "dockerFile": "Dockerfile",
+  "build": {
+    "args": {
+      "USER_UID": "1001",
+      "USER_GID": "1001",
+      "USERNAME": "user"
+    }
+  },
+  "runArgs": [
+    "--net=host",
+    "--dns=8.8.8.8",
+    "--dns=8.8.4.4",
+    "--privileged",
+    "--cap-add=SYS_PTRACE",
+    "--security-opt=seccomp:unconfined",
+    "--volume=/tmp/.X11-unix:/tmp/.X11-unix:rw", 
+    "--volume=/dev/dri:/dev/dri:rw",
+    "--volume=${env:HOME}/.Xauthority:/home/user/.Xauthority:rw",
+    "--env=DISPLAY=${env:DISPLAY}",
+    "--env=QT_X11_NO_MITSHM=1",
+    "--env=LIBGL_ALWAYS_INDIRECT=1",
+    "--env=XAUTHORITY=/home/user/.Xauthority",
+    "--env=NVIDIA_VISIBLE_DEVICES=all",
+    "--env=NVIDIA_DRIVER_CAPABILITIES=graphics,utility,compute"
+  ],
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  "remoteUser": "user",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "username": "user",
+      "uid": "1001",
+      "gid": "1001",
+      "upgradePackages": true,
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "installOhMyZshConfig": true,
+      "configureGitLfsAndNonInteractiveGit": true,
+      "nonInteractiveTimeZone": false
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools-extension-pack",
+        "ms-python.python",
+        "ms-python.flake8",
+        "ms-python.pylint",
+        "twxs.cmake",
+        "ms-vscode.cmake-tools",
+        "redhat.vscode-xml",
+        "redhat.vscode-yaml",
+        "ms-iot.vscode-ros",
+        "nonanonno.vscode-ros2",
+        "DotJoshJohnson.xml",
+        "streetsidesoftware.code-spell-checker",
+        "eamodio.gitlens",
+        "ms-vscode.live-server",
+        "ms-vscode-remote.remote-containers",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "python.defaultInterpreterPath": "/usr/bin/python3",
+        "python.formatting.provider": "black",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "cmake.configureOnOpen": false,
+        "C_Cpp.default.includePath": [
+          "/opt/ros/humble/include/**",
+          "/usr/include/**",
+          "/usr/local/include/**",
+          "${workspaceFolder}/src/**",
+          "${workspaceFolder}/install/**"
+        ],
+        "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+        "C_Cpp.default.cStandard": "c11",
+        "C_Cpp.default.cppStandard": "c++17",
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "files.associations": {
+          "*.launch": "xml",
+          "*.xacro": "xml",
+          "*.urdf": "xml"
+        }
+      }
+    }
+  },
+  "postCreateCommand": "chmod +x .devcontainer/setup-simple.sh .devcontainer/setup-x11.sh && ./.devcontainer/setup-simple.sh && ./.devcontainer/setup-x11.sh",
+  "forwardPorts": [
+    8080,
+    8888
+  ],
+  "portsAttributes": {
+    "8080": {
+      "label": "Web Server",
+      "onAutoForward": "notify"
+    },
+    "8888": {
+      "label": "Jupyter",
+      "onAutoForward": "notify"
+    }
+  }
+}
