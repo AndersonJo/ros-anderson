@@ -28,3 +28,8 @@ tqdm>=4.64.0
 gym-gazebo2  # ROS2 + Gazebo + OpenAI Gym integration (if available)
 psutil>=5.9.0  # System monitoring
 cloudpickle>=2.0.0  # For saving/loading models 
+
+# Anderson added
+cycler==0.12.1
+kiwisolver==1.4.8
+pytz==2025.2

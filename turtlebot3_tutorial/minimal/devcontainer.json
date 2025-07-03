@@ -1,0 +1,19 @@
+{
+  "name": "Simple Gazebo GUI Container",
+  "dockerFile": "Dockerfile",
+  "runArgs": [
+    // Core X11 forwarding - shares Linux GUI system
+    "--volume=/tmp/.X11-unix:/tmp/.X11-unix:rw",
+    "--env=DISPLAY=${env:DISPLAY}",
+    
+    // GPU acceleration for 3D graphics
+    "--gpus=all",
+    "--env=NVIDIA_VISIBLE_DEVICES=all",
+    "--env=NVIDIA_DRIVER_CAPABILITIES=graphics,utility,compute",
+    
+    // Network access for ROS communication
+    "--net=host"
+  ],
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind"
+}

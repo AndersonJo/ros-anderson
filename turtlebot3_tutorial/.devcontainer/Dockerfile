@@ -8,7 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
     NVIDIA_VISIBLE_DEVICES=all \
     NVIDIA_DRIVER_CAPABILITIES=graphics,utility,compute \
     QT_X11_NO_MITSHM=1 \
-    DISPLAY=:1 \
+    DISPLAY=:0 \
     TZ=Asia/Seoul
 
 ARG USER_UID=1000
@@ -53,8 +53,6 @@ RUN apt-get update && \
     python3-wstool \
     python3-colcon-argcomplete \
     # GUI support
-    x11-apps \
-    mesa-utils \
     libgl1-mesa-glx \
     libglu1-mesa-dev \
     libx11-6 \
@@ -74,9 +72,12 @@ RUN apt-get update && \
     libxi6 \
     libegl1-mesa \
     libgl1-mesa-dri \
-    # X11 tools
+    # X11 tools and utilities
     x11-utils \
+    x11-xserver-utils \
+    x11-apps \
     xauth \
+    mesa-utils \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -148,7 +149,7 @@ RUN apt-get update && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* || echo "Some Gazebo packages may have conflicts, continuing..."
 
-# Install additional Python packages needed for Ubuntu 22.04
+# Install additional Python packages and missing X11 tools
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     python3-distutils-extra \
@@ -157,6 +158,8 @@ RUN apt-get update && \
     python3-numpy \
     python3-matplotlib \
     python3-opencv \
+    # Additional OpenGL tools (install if available)
+    && (apt-get install -y mesa-utils-extra || echo "mesa-utils-extra not available") \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -178,14 +181,20 @@ RUN python3 -m pip install --upgrade pip && \
     (pip3 install numpy scipy matplotlib --break-system-packages || pip3 install numpy scipy matplotlib) && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Copy and setup X11 configuration script
+COPY setup-x11.sh /usr/local/bin/setup-x11.sh
+RUN chmod +x /usr/local/bin/setup-x11.sh
+
 # Create workspace directory
 WORKDIR /workspace
 
 # Initialize rosdep (check if already initialized)
 RUN if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init; fi && rosdep update
 
-# Fix ownership and setup final environment
-RUN chown -R $USERNAME:$USERNAME /workspace
+# Create runtime directory and fix ownership
+RUN mkdir -p /tmp/runtime-user && \
+    chmod 755 /tmp/runtime-user && \
+    chown -R $USERNAME:$USERNAME /workspace /tmp/runtime-user
 
 USER $USERNAME
 
@@ -202,11 +211,11 @@ RUN echo "# ROS2 + TurtleBot3 + RL Development Environment" >> /home/$USERNAME/.
     echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> /home/$USERNAME/.bashrc && \
     echo "" >> /home/$USERNAME/.bashrc && \
     echo "# X11 Display settings" >> /home/$USERNAME/.bashrc && \
-    echo "export DISPLAY=:1" >> /home/$USERNAME/.bashrc && \
+    echo "export DISPLAY=\${DISPLAY:-:0}" >> /home/$USERNAME/.bashrc && \
     echo "export QT_X11_NO_MITSHM=1" >> /home/$USERNAME/.bashrc && \
-    echo "# OpenGL software rendering for Gazebo" >> /home/$USERNAME/.bashrc && \
-    echo "export LIBGL_ALWAYS_SOFTWARE=1" >> /home/$USERNAME/.bashrc && \
-    echo "export GALLIUM_DRIVER=llvmpipe" >> /home/$USERNAME/.bashrc && \
+    echo "# OpenGL hardware acceleration (fallback to software if needed)" >> /home/$USERNAME/.bashrc && \
+    echo "export LIBGL_ALWAYS_INDIRECT=0" >> /home/$USERNAME/.bashrc && \
+    echo "export LIBGL_ALWAYS_SOFTWARE=0" >> /home/$USERNAME/.bashrc && \
     echo "export MESA_GL_VERSION_OVERRIDE=3.3" >> /home/$USERNAME/.bashrc && \
     echo "" >> /home/$USERNAME/.bashrc && \
     echo "# Useful aliases" >> /home/$USERNAME/.bashrc && \
